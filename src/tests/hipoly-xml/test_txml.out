@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- my comment -->
+<EL1 test="value" test2="value2">
+    <EL2/>
+    tak toto je text mezi elementy - Tom &amp; Jerry
+    <!-- another comment -->
+    <ARRAY bin_data="on" length="50" type="">
+        0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+    </ARRAY>
+    <&lt;&amp;/>
+    <Jmeno atrr&gt;&quot;="&quot;&apos;"/>
+    <a>
+        <b/>
+    </a>
+</EL1>
