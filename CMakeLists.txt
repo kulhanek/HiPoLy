@@ -53,18 +53,14 @@ ELSE(CMAKE_USE_PTHREADS_INIT)
     ENDIF(CMAKE_USE_WIN32_THREADS_INIT)
 ENDIF(CMAKE_USE_PTHREADS_INIT)
 
-# interaction with Qt4 ---------------------------
+# interaction with Qt5 ---------------------------
 IF(TRY_QT_LIB)
-    FIND_PACKAGE(Qt5Core REQUIRED)
+    FIND_PACKAGE(Qt5Core QUIET)
     IF(Qt5Core_FOUND)
         SET(HAVE_QT5 1)
         ADD_DEFINITIONS(-DHAVE_QT5)
     ENDIF(Qt5Core_FOUND)
 ENDIF(TRY_QT_LIB)
-
-# boost ---------------------------------------
-SET(BOOST_ROOT ${DEVELOPMENT_ROOT}/thirdparty/boost/1.51.0)
-INCLUDE_DIRECTORIES(${BOOST_ROOT} SYSTEM)
 
 SET(SYSTEM_LIBS ${QT_LIBRARIES}
                 ${CMAKE_THREAD_LIBS_INIT}

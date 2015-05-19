@@ -24,9 +24,6 @@
 #include <Terminal.hpp>
 #include <VerboseStr.hpp>
 
-#include <boost/algorithm/string/split.hpp>
-#include <boost/algorithm/string/classification.hpp>
-
 //------------------------------------------------------------------------------
 
 #define SO_NAME_LENGTH      30
@@ -35,8 +32,6 @@
 //------------------------------------------------------------------------------
 
 using namespace std;
-using namespace boost;
-using namespace boost::algorithm;
 
 //==============================================================================
 //------------------------------------------------------------------------------
@@ -63,7 +58,15 @@ CSimpleOptions::~CSimpleOptions(void)
 int CSimpleOptions::ParseCmdLine(const std::string& cmdline)
 {
     std::vector<std::string>    args;
-    split(args,cmdline,is_any_of("\t "),boost::token_compress_on);
+    std::istringstream          iss(cmdline);
+    std::string                 arg;
+    
+    // split(args,cmdline,is_any_of("\t "),boost::token_compress_on);
+    for(;;){
+        iss >> arg;
+        if( ! iss ) break;
+        args.push_back(arg);
+    }
 
     char** argv;
     argv = (char**)malloc(args.size()*sizeof(char*));
