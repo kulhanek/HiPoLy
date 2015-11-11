@@ -40,6 +40,10 @@ ENDIF(NOT DEVELOPMENT_ROOT)
 # external libraries -----------------------------------------------------------
 # ==============================================================================
 
+# boost ---------------------------------------
+SET(BOOST_ROOT ${DEVELOPMENT_ROOT}/thirdparty/boost/1.59.0)
+INCLUDE_DIRECTORIES(${BOOST_ROOT} SYSTEM)
+
 # try to find threads ----------------------------
 FIND_PACKAGE(Threads)
 
