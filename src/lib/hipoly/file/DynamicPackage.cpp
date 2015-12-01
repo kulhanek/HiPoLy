@@ -143,7 +143,7 @@ void* CDynamicPackage::GetObjAddress(const CSmallString& name)
     if( LibraryHandle == NULL ) return(NULL);
 
 #if defined _WIN32 || defined __CYGWIN__
-    return((TProcAdress)::GetProcAddress(LibraryHandle,name));
+    return((void*)::GetProcAddress(LibraryHandle,name));
 #else
     // warning: ISO C++ forbids casting between pointer-to-function and pointer-to-object
     // this stupid thing bypass this warning

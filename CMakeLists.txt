@@ -88,6 +88,7 @@ ENDIF(UNIX)
 # policies ---------------------------------------
 IF(COMMAND cmake_policy)
     cmake_policy(SET CMP0003 NEW)
+    cmake_policy(SET CMP0020 NEW)
 ENDIF(COMMAND cmake_policy)
 
 # ==============================================================================
