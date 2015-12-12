@@ -11,6 +11,7 @@ SET(TEST_XML_SRC
 
 # final build ------------------------------------------------------------------
 ADD_EXECUTABLE(hipoly-xml ${TEST_XML_SRC})
+ADD_DEPENDENCIES(hipoly-xml hipoly_shared)
 IF(Qt5Core_FOUND)
     QT5_USE_MODULES(hipoly-xml Core)
 ENDIF(Qt5Core_FOUND)
