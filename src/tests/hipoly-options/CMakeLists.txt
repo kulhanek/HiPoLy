@@ -2,8 +2,6 @@
 # HiPoLy CMake File
 # ==============================================================================
 
-SET(EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_SOURCE_DIR})
-
 # program objects --------------------------------------------------------------
 SET(TEST_XML_SRC
         test_options.cpp
