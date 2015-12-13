@@ -4,6 +4,7 @@ CMakeCache.txt
 CMakeFiles
 DartConfiguration.tcl
 Makefile
-bin/
-lib/
-include/
+/bin
+/lib
+/include
+/test
