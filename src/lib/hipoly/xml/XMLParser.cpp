@@ -760,6 +760,7 @@ bool CXMLParser::DecodeXMLText(unsigned char* p_string,unsigned int len,
                         found = false;
                         //ES_ERROR("cannot decode text, terminal ';' character was not found");
                         //return(false);
+                        break;
                     }
                 } while(p_string[j] != ';');
                 if( found ){
