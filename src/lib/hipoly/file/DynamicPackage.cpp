@@ -73,7 +73,7 @@ bool CDynamicPackage::Open(const CSmallString& name)
     } catch(...) {
     }
 #else
-    LibraryHandle = dlopen(name,RTLD_NOW|RTLD_GLOBAL);
+    LibraryHandle = dlopen(name,RTLD_LAZY|RTLD_GLOBAL);
     LibraryName = name;
     if( LibraryHandle == NULL ) {
         ES_ERROR(dlerror());
