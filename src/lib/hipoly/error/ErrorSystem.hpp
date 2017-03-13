@@ -181,6 +181,9 @@ public:
     /// is there an error?
     bool IsError(void);
 
+    /// is there a record?
+    bool IsAnyRecord(void);
+
     /// remove all errors
     void RemoveAllErrors(void);
 

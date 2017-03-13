@@ -57,8 +57,11 @@ public:
     /// set output stream
     void SetOutputStream(FILE* fout);
 
-    /// detect if it is terminal
+    /// detect if it is terminal (from output file or stdout)
     void DetectTerminal(void);
+
+    /// force colors and underlying terminal from stdin
+    void ForceColors(void);
 
     /// set number of columns
     void SetNumberOfColumns(int columns);
