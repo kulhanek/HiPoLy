@@ -117,13 +117,13 @@ void CTerminal::DetectTerminal(void)
 }
 //------------------------------------------------------------------------------
 
-bool CTerminal::GetSize(int &nrow,int &ncolumns)
+bool CTerminal::GetSize(int &nrows,int &ncolumns)
 {
     nrows = 1;
     ncolumns = 80;
 
     // is it terminal?
-    int file_id = fileno(stdio);
+    int file_id = fileno(stdin);
 
     if( isatty(file_id) == 0 ) return(false); // no
 
@@ -133,7 +133,7 @@ bool CTerminal::GetSize(int &nrow,int &ncolumns)
     struct winsize winsize;
     if( ioctl(file_id,TIOCGWINSZ,&winsize) != 0 ) return(false);
 
-    nrow = winsize.ws_row;
+    nrows = winsize.ws_row;
     ncolumns = winsize.ws_col;
     return(true);
 }
