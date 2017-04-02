@@ -23,6 +23,7 @@
 #include <string.h>
 #include <SmallTime.hpp>
 #include <SmallTimeAndDate.hpp>
+#include <sstream>
 
 //==============================================================================
 //------------------------------------------------------------------------------
@@ -45,6 +46,17 @@ CSmallTime::CSmallTime(const time_t& time)
 CSmallTime::CSmallTime(const CSmallTimeAndDate& timeanddate)
 {
     Time = timeanddate.TimeDate.tm_sec + timeanddate.TimeDate.tm_min*60 + timeanddate.TimeDate.tm_hour*3600;
+}
+
+// -----------------------------------------------------------------------------
+
+void CSmallTime::SetFromString(const CSmallString& stime)
+{
+    int  hh,mm,ss;
+    char d;
+    std::stringstream str(stime);
+    str >> hh >> d >> mm >> d >> ss;
+    Time = hh*3600 + mm*60 + ss;
 }
 
 // -----------------------------------------------------------------------------
@@ -92,6 +104,15 @@ CSmallString CSmallTime::GetSTime(void) const
 {
     char buffer[10];
     sprintf(buffer,"%02d:%02d:%02d",GetHour(),GetMinute(),GetSecond());
+    return(CSmallString(buffer));
+}
+
+//---------------------------------------------------------------------------
+
+CSmallString CSmallTime::GetSTimeFull(void) const
+{
+    char buffer[10];
+    sprintf(buffer,"%02d:%02d:%02d",Time /3600,GetMinute(),GetSecond());
     return(CSmallString(buffer));
 }
 
