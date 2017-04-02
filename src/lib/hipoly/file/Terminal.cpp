@@ -115,6 +115,28 @@ void CTerminal::DetectTerminal(void)
     ColorsAvailable = true;
 #endif
 }
+//------------------------------------------------------------------------------
+
+bool CTerminal::GetSize(int &nrow,int &ncolumns)
+{
+    nrows = 1;
+    ncolumns = 80;
+
+    // is it terminal?
+    int file_id = fileno(stdio);
+
+    if( isatty(file_id) == 0 ) return(false); // no
+
+    // file is connected to terminal get its properties
+
+    // dimensions
+    struct winsize winsize;
+    if( ioctl(file_id,TIOCGWINSZ,&winsize) != 0 ) return(false);
+
+    nrow = winsize.ws_row;
+    ncolumns = winsize.ws_col;
+    return(true);
+}
 
 //------------------------------------------------------------------------------
 

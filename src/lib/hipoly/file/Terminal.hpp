@@ -76,6 +76,9 @@ public:
     /// are colors available by given terminal?
     bool AreColorsAvailable(void) const;
 
+    /// get terminal dimmension (from stdin)
+    static bool GetSize(int &nrow,int &ncolumns);
+
 // executive methods ----------------------------------------------------------
     /// set foreground and background colors
     bool SetColors(int foreground,int background) const;
