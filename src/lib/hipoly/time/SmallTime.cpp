@@ -56,7 +56,8 @@ void CSmallTime::SetFromString(const CSmallString& stime)
 {
     int  hh,mm,ss;
     char d;
-    std::stringstream str(std::string(stime));
+    stringstream str;
+    str.str(string(stime));
     str >> hh >> d >> mm >> d >> ss;
     Time = hh*3600 + mm*60 + ss;
 }
