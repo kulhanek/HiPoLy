@@ -115,6 +115,56 @@ void CTerminal::DetectTerminal(void)
     ColorsAvailable = true;
 #endif
 }
+//------------------------------------------------------------------------------
+
+bool CTerminal::GetSize(int &nrows,int &ncolumns)
+{
+    nrows = 1;
+    ncolumns = 80;
+
+    // is it terminal?
+    int file_id = fileno(stdin);
+
+    if( isatty(file_id) == 0 ) return(false); // no
+
+    // file is connected to terminal get its properties
+
+    // dimensions
+    struct winsize winsize;
+    if( ioctl(file_id,TIOCGWINSZ,&winsize) != 0 ) return(false);
+
+    nrows = winsize.ws_row;
+    ncolumns = winsize.ws_col;
+    return(true);
+}
+
+//------------------------------------------------------------------------------
+
+void CTerminal::ForceColors(void)
+{
+    // default values
+    ColorsAvailable = true;
+    ColorsEnabled = true;
+    NRows=40;
+    NColumns=80;
+
+#if ! (defined _WIN32 || defined __CYGWIN__)
+
+    // is it terminal?
+    int file_id = fileno(stdin);
+
+    if( isatty(file_id) == 0 ) return; // no
+
+    // file is connected to terminal get its properties
+
+    // dimensions
+    struct winsize winsize;
+    if( ioctl(file_id,TIOCGWINSZ,&winsize) != 0 ) return;
+
+    NRows = winsize.ws_row;
+    NColumns = winsize.ws_col;
+#endif
+}
 
 //==============================================================================
 //------------------------------------------------------------------------------

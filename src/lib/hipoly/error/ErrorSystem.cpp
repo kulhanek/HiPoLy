@@ -295,6 +295,22 @@ bool CErrorSystem::IsError(void)
 
 //------------------------------------------------------------------------------
 
+bool CErrorSystem::IsAnyRecord(void)
+{
+    if( MainElement == NULL ) return(false);
+
+    bool record = false;
+    ErrorMutex.Lock();
+
+        record = MainElement->HasChildNodes();
+
+    ErrorMutex.Unlock();
+
+    return(record);
+}
+
+//------------------------------------------------------------------------------
+
 void CErrorSystem::RemoveAllErrors(void)
 {
     if( MainElement == NULL ) return;

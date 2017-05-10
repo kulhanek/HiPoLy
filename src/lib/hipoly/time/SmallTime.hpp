@@ -55,6 +55,9 @@ public:
     CSmallTime(const CSmallTimeAndDate& timeanddate);
 
 // setup --------------------------------------------------------
+    /// set from the string in the hh:mm:ss format
+    void SetFromString(const CSmallString& stime);
+
     /// set actual time
     void GetActualTime(void);
 
@@ -80,6 +83,14 @@ public:
         ss - second
     */
     CSmallString GetSTime(void) const;
+
+    /// return time in string format - no 24 hour limits
+    /*! format "hh:mm:ss"
+        hh - hour
+        mm - minute
+        ss - second
+    */
+    CSmallString GetSTimeFull(void) const;
 
     /// return time in string format
     /*! format "days hh:mm:ss"

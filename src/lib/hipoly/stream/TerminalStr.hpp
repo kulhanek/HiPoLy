@@ -66,7 +66,7 @@ public:
     /// attach to fout
     void Attach(FILE* fout);
 
-    /// disconneted from stdout
+    /// disconnect from stdout
     void DisconnectFromStdout(void);
 
     /// get terminal

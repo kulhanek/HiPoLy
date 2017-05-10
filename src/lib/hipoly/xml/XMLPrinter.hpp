@@ -84,6 +84,9 @@ public:
     /// save data to string
     const CSmallString Print(void);
 
+    /// encode XML text
+    static const CSmallString EncodeXMLText(const CSmallString& input);
+
 // section of private data ----------------------------------------------------
 private:
     CMemBlockFile   OutputFile;             // output memory stream
@@ -107,7 +110,7 @@ private:
     void PrintTXMLElement(const CXMLElement* p_element,int level);
     void PrintTXMLText(const CXMLText* p_text,int level);
     void PrintTXMLBinData(const CXMLBinData* p_bindata,int level);
-    void EncodeXMLText(const CSmallString& input,CSmallString& output);
+    static void EncodeXMLText(const CSmallString& input,CSmallString& output);
     void SetTab(int level);
 
     void PrintBXMLHeader(void);

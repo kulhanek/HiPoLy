@@ -73,7 +73,8 @@ bool CDynamicPackage::Open(const CSmallString& name)
     } catch(...) {
     }
 #else
-    LibraryHandle = dlopen(name,RTLD_NOW|RTLD_GLOBAL);
+    // RT#196104 - do not use RTLD_NOW, it is slow and might lead to unresolved symbols ...
+    LibraryHandle = dlopen(name,RTLD_LAZY|RTLD_GLOBAL);
     LibraryName = name;
     if( LibraryHandle == NULL ) {
         ES_ERROR(dlerror());

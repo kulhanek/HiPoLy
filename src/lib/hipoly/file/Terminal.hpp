@@ -57,8 +57,11 @@ public:
     /// set output stream
     void SetOutputStream(FILE* fout);
 
-    /// detect if it is terminal
+    /// detect if it is terminal (from output file or stdout)
     void DetectTerminal(void);
+
+    /// force colors and underlying terminal from stdin
+    void ForceColors(void);
 
     /// set number of columns
     void SetNumberOfColumns(int columns);
@@ -72,6 +75,9 @@ public:
 
     /// are colors available by given terminal?
     bool AreColorsAvailable(void) const;
+
+    /// get terminal dimmension (from stdin)
+    static bool GetSize(int &nrow,int &ncolumns);
 
 // executive methods ----------------------------------------------------------
     /// set foreground and background colors

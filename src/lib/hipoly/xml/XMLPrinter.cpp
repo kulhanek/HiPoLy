@@ -558,6 +558,15 @@ void CXMLPrinter::PrintTXMLBinData(const CXMLBinData* p_bindata,int level)
 
 //------------------------------------------------------------------------------
 
+const CSmallString CXMLPrinter::EncodeXMLText(const CSmallString& input)
+{
+    CSmallString output;
+    EncodeXMLText(input,output);
+    return(output);
+}
+
+//------------------------------------------------------------------------------
+
 void CXMLPrinter::EncodeXMLText(const CSmallString& input,CSmallString& output)
 {
     /*! @RETURN decoded character or 0 for error
