@@ -93,7 +93,13 @@ public:
     CXMLText*       CreateChildText(bool allow_all=false);
 
     /// create new text node
-    CXMLText*       CreateChildText(const CSmallString& contents,bool allow_all=false);
+    CXMLText*       CreateChildText(const CSmallString& contents,bool allow_all);
+
+    /// create new text node
+    CXMLText*       CreateChildText(const CSmallString& contents);
+
+    /// create new text node
+    CXMLText*       CreateChildText(const char* contents);
 
     /// create new binary data
     CXMLBinData*    CreateChildBinData(const CSmallString& name);

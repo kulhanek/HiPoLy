@@ -319,6 +319,24 @@ CXMLText* CXMLNode::CreateChildText(const CSmallString& contents,bool allow_all)
 
 //------------------------------------------------------------------------------
 
+CXMLText* CXMLNode::CreateChildText(const CSmallString& contents)
+{
+    CXMLText* p_ele = CreateChildText(false);
+    p_ele->SetText(contents);
+    return(p_ele);
+}
+
+//------------------------------------------------------------------------------
+
+CXMLText* CXMLNode::CreateChildText(const char* contents)
+{
+    CXMLText* p_ele = CreateChildText(false);
+    p_ele->SetText(contents);
+    return(p_ele);
+}
+
+//------------------------------------------------------------------------------
+
 CXMLBinData* CXMLNode::CreateChildBinData(const CSmallString& name)
 {
     if( (GetNodeType() != EXNT_ELEMENT) && (GetNodeType() != EXNT_ELEMENT) ) {
