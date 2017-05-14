@@ -218,7 +218,7 @@ public:
     /// remove one sibling node
     void RemoveSiblingNode(void);
 
-    /// remove one sibling node
+    /// remove all sibling node
     void RemoveAllSiblingNodes(void);
 
     /// remove all child nodes
