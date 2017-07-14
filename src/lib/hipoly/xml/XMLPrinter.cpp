@@ -452,19 +452,22 @@ void CXMLPrinter::PrintTXMLElement(const CXMLElement* p_element,int level)
         }
     }
 
-    if( PrintAsItIs == false ){
-        if( std::find(BlockElements.begin(), BlockElements.end(), name) != BlockElements.end() ){
-            PrintAsItIs = true;
-            UseTabs = true;
-        }
+    if( std::find(PreElements.begin(), PreElements.end(), name) != PreElements.end() ){
+        UseTabs = false;
     }
 
     if( UseTabs == true ) {
         SetTab(level);
     }
 
-    if( std::find(PreElements.begin(), PreElements.end(), name) != PreElements.end() ){
-        UseTabs = false;
+    bool BlockNode = false;
+
+    if( PrintAsItIs == false ){
+        if( std::find(BlockElements.begin(), BlockElements.end(), name) != BlockElements.end() ){
+            PrintAsItIs = true;
+            UseTabs = false;
+            BlockNode = true;
+        }
     }
 
     CSmallString output;
@@ -513,10 +516,10 @@ void CXMLPrinter::PrintTXMLElement(const CXMLElement* p_element,int level)
         OutputFile.WriteString("</");
         OutputFile.WriteString(p_element->GetName());
         OutputFile.WriteString(">");
-        if( ! PrintAsItIs ) OutputFile.WriteString("\n");
+        if( (! PrintAsItIs) || BlockNode ) OutputFile.WriteString("\n");
     } else {
         OutputFile.WriteString("/>");
-        if( ! PrintAsItIs ) OutputFile.WriteString("\n");
+        if( (! PrintAsItIs) || BlockNode ) OutputFile.WriteString("\n");
     }
 
     if( _PrintAsItIs == false ){
