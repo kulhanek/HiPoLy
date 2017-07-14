@@ -512,7 +512,6 @@ void CXMLPrinter::PrintTXMLElement(const CXMLElement* p_element,int level)
 
     int _level = level;
     if( std::find(TabResetElements.begin(), TabResetElements.end(), name) != TabResetElements.end() ){
-        UseTabs = false;
         level = -1;
     }
 
