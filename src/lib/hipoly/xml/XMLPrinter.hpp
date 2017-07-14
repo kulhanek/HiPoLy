@@ -98,7 +98,7 @@ public:
     void ClearPreformatedElements(void);
 
     /// register  pre-formated element
-    void RegisterPreformatedElements(const CSmallString& elem);
+    void RegisterPreformatedElement(const CSmallString& elem);
 
 // section of private data ----------------------------------------------------
 private:

@@ -122,7 +122,7 @@ void CXMLPrinter::ClearPreformatedElements(void)
 
 //------------------------------------------------------------------------------
 
-void CXMLPrinter::RegisterPreformatedElements(const CSmallString& elem)
+void CXMLPrinter::RegisterPreformatedElement(const CSmallString& elem)
 {
     PreElements.push_back(elem);
 }
