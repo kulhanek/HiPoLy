@@ -33,6 +33,7 @@
 #include <XMLText.hpp>
 #include <XMLBinData.hpp>
 #include <XMLBinary.hpp>
+#include <algorithm>
 
 // NOTES: encoded parts are as follows:
 //        a) attribute values
@@ -420,7 +421,7 @@ void CXMLPrinter::PrintTXMLElement(const CXMLElement* p_element,int level)
         LOGIC_ERROR("p_comment == NULL");
     }
 
-    CSmallString name = p_p_element->GetName();
+    CSmallString name = p_element->GetName();
 
     if( name == NULL ) {
         LOGIC_ERROR("element name is NULL");
