@@ -106,6 +106,12 @@ public:
     /// register  pre-formated element
     void RegisterPreformatedElement(const CSmallString& elem);
 
+    /// clear tab-reset elements
+    void ClearTabResetElements(void);
+
+    /// register tab-reset element
+    void RegisterTabResetElement(const CSmallString& elem);
+
 // section of private data ----------------------------------------------------
 private:
     CMemBlockFile   OutputFile;             // output memory stream
@@ -121,6 +127,7 @@ private:
     std::vector<CSmallString>   BlockElements;
     std::vector<CSmallString>   LinearElements;
     std::vector<CSmallString>   PreElements;
+    std::vector<CSmallString>   TabResetElements;
 
 // section of private methods -------------------------------------------------
     void PrintXML(void);

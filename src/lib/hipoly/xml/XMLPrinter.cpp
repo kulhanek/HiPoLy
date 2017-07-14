@@ -142,6 +142,20 @@ void CXMLPrinter::RegisterPreformatedElement(const CSmallString& elem)
     PreElements.push_back(elem);
 }
 
+//------------------------------------------------------------------------------
+
+void CXMLPrinter::ClearTabResetElements(void)
+{
+    TabResetElements.clear();
+}
+
+//------------------------------------------------------------------------------
+
+void CXMLPrinter::RegisterTabResetElement(const CSmallString& elem)
+{
+    TabResetElements.push_back(elem);
+}
+
 //==============================================================================
 //------------------------------------------------------------------------------
 //==============================================================================
@@ -496,6 +510,12 @@ void CXMLPrinter::PrintTXMLElement(const CXMLElement* p_element,int level)
         }
     }
 
+    int _level = level;
+    if( std::find(PreElements.begin(), PreElements.end(), name) != PreElements.end() ){
+        UseTabs = false;
+        level = -1;
+    }
+
     // do we have child nodes ? ---------------------
     if( p_element->HasChildNodes() == true ) {
         OutputFile.WriteString(">");
@@ -507,6 +527,8 @@ void CXMLPrinter::PrintTXMLElement(const CXMLElement* p_element,int level)
             p_node = p_node->GetNextSiblingNode();
         }
     }
+
+    level = _level;
 
     // terminate element block
     if( p_element->HasChildNodes() == true ) {
