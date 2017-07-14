@@ -88,6 +88,12 @@ public:
     /// encode XML text
     static const CSmallString EncodeXMLText(const CSmallString& input);
 
+    /// clear block elements
+    void ClearBlockElements(void);
+
+    /// register block element
+    void RegisterBlockElement(const CSmallString& elem);
+
     /// clear linear elements
     void ClearLinearElements(void);
 
@@ -112,6 +118,7 @@ private:
     int             TabWidth;               // tab width in characters
     unsigned int    TBinBlockSize;          // size of bin block per line
     // linear elements
+    std::vector<CSmallString>   BlockElements;
     std::vector<CSmallString>   LinearElements;
     std::vector<CSmallString>   PreElements;
 

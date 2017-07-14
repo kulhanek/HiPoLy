@@ -102,6 +102,20 @@ void CXMLPrinter::EnableTextElementTranscoding(bool set)
 
 //------------------------------------------------------------------------------
 
+void CXMLPrinter::ClearBlockElements(void)
+{
+    BlockElements.clear();
+}
+
+//------------------------------------------------------------------------------
+
+void CXMLPrinter::RegisterBlockElement(const CSmallString& elem)
+{
+    BlockElements.push_back(elem);
+}
+
+//------------------------------------------------------------------------------
+
 void CXMLPrinter::ClearLinearElements(void)
 {
     LinearElements.clear();
@@ -438,12 +452,19 @@ void CXMLPrinter::PrintTXMLElement(const CXMLElement* p_element,int level)
         }
     }
 
-    if( std::find(PreElements.begin(), PreElements.end(), name) != PreElements.end() ){
-        UseTabs = false;
+    if( PrintAsItIs == false ){
+        if( std::find(BlockElements.begin(), BlockElements.end(), name) != BlockElements.end() ){
+            PrintAsItIs = true;
+            UseTabs = true;
+        }
     }
 
     if( UseTabs == true ) {
         SetTab(level);
+    }
+
+    if( std::find(PreElements.begin(), PreElements.end(), name) != PreElements.end() ){
+        UseTabs = false;
     }
 
     CSmallString output;
