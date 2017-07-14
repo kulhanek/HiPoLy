@@ -99,6 +99,34 @@ void CXMLPrinter::EnableTextElementTranscoding(bool set)
     TranscodeTextElement = set;
 }
 
+//------------------------------------------------------------------------------
+
+void CXMLPrinter::ClearLinearElements(void)
+{
+    LinearElements.clear();
+}
+
+//------------------------------------------------------------------------------
+
+void CXMLPrinter::RegisterLinearElement(const CSmallString& elem)
+{
+    LinearElements.push_back(elem);
+}
+
+//------------------------------------------------------------------------------
+
+void CXMLPrinter::ClearPreformatedElements(void)
+{
+    PreElements.clear();
+}
+
+//------------------------------------------------------------------------------
+
+void CXMLPrinter::RegisterPreformatedElements(const CSmallString& elem)
+{
+    PreElements.push_back(elem);
+}
+
 //==============================================================================
 //------------------------------------------------------------------------------
 //==============================================================================
@@ -392,12 +420,29 @@ void CXMLPrinter::PrintTXMLElement(const CXMLElement* p_element,int level)
         LOGIC_ERROR("p_comment == NULL");
     }
 
-    if( UseTabs == true ) {
-        SetTab(level);
+    CSmallString name = p_p_element->GetName();
+
+    if( name == NULL ) {
+        LOGIC_ERROR("element name is NULL");
     }
 
-    if( p_element->GetName() == NULL ) {
-        LOGIC_ERROR("element name is NULL");
+    bool _PrintAsItIs = true;
+    bool _UseTabs = UseTabs;
+
+    if( PrintAsItIs == false ){
+        _PrintAsItIs = false;
+        if( std::find(LinearElements.begin(), LinearElements.end(), name) != LinearElements.end() ){
+            PrintAsItIs = true;
+            UseTabs = false;
+        }
+    }
+
+    if( std::find(PreElements.begin(), PreElements.end(), name) != PreElements.end() ){
+        UseTabs = false;
+    }
+
+    if( UseTabs == true ) {
+        SetTab(level);
     }
 
     CSmallString output;
@@ -451,6 +496,12 @@ void CXMLPrinter::PrintTXMLElement(const CXMLElement* p_element,int level)
         OutputFile.WriteString("/>");
         if( ! PrintAsItIs ) OutputFile.WriteString("\n");
     }
+
+    if( _PrintAsItIs == false ){
+        PrintAsItIs = false;
+    }
+
+    UseTabs = _UseTabs;
 }
 
 //------------------------------------------------------------------------------

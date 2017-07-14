@@ -26,6 +26,7 @@
 #include <HiPoLyMainHeader.hpp>
 #include <SmallString.hpp>
 #include <MemBlockFile.hpp>
+#include <vector>
 
 // -----------------------------------------------------------------------------
 
@@ -87,6 +88,18 @@ public:
     /// encode XML text
     static const CSmallString EncodeXMLText(const CSmallString& input);
 
+    /// clear linear elements
+    void ClearLinearElements(void);
+
+    /// register linear element
+    void RegisterLinearElement(const CSmallString& elem);
+
+    /// clear pre-formated elements
+    void ClearPreformatedElements(void);
+
+    /// register  pre-formated element
+    void RegisterPreformatedElements(const CSmallString& elem);
+
 // section of private data ----------------------------------------------------
 private:
     CMemBlockFile   OutputFile;             // output memory stream
@@ -98,6 +111,9 @@ private:
     bool            UseSpacesInsteadOfTab;  // use spaces instead of tabs
     int             TabWidth;               // tab width in characters
     unsigned int    TBinBlockSize;          // size of bin block per line
+    // linear elements
+    std::vector<CSmallString>   LinearElements;
+    std::vector<CSmallString>   PreElements;
 
 // section of private methods -------------------------------------------------
     void PrintXML(void);
