@@ -40,9 +40,9 @@ ENDIF(NOT DEVELOPMENT_ROOT)
 # external libraries -----------------------------------------------------------
 # ==============================================================================
 
-# boost ---------------------------------------
-SET(BOOST_ROOT ${DEVELOPMENT_ROOT}/thirdparty/boost/1.59.0)
-INCLUDE_DIRECTORIES(${BOOST_ROOT} SYSTEM)
+# boost =======================
+FIND_PACKAGE(Boost REQUIRED)
+INCLUDE_DIRECTORIES(${Boost_INCLUDE_DIRS} SYSTEM)
 
 # try to find threads ----------------------------
 FIND_PACKAGE(Threads)
@@ -63,6 +63,9 @@ IF(TRY_QT_LIB)
     IF(Qt5Core_FOUND)
         SET(HAVE_QT5 1)
         ADD_DEFINITIONS(-DHAVE_QT5)
+        MESSAGE(STATUS "Qt5Core version: ${Qt5Core_VERSION}")
+    ELSE(Qt5Core_FOUND)
+        MESSAGE(STATUS "Qt5Core: not found")
     ENDIF(Qt5Core_FOUND)
 ENDIF(TRY_QT_LIB)
 

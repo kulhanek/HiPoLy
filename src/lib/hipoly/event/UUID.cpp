@@ -196,7 +196,7 @@ bool CUUID::CreateUUID(void)
 #else
     ifstream ifs("/dev/urandom",ios::binary);
     ifs.read((char*)this,sizeof(CUUID));
-    return(ifs);
+    return(ifs.good());
 #endif
 #endif
 }
