@@ -39,9 +39,10 @@ ENDIF(NOT DEVELOPMENT_ROOT)
 # ==============================================================================
 # external libraries -----------------------------------------------------------
 # ==============================================================================
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${DEVELOPMENT_ROOT}/projects/cmake-modules/1.0/share/modules")
 
 # boost =======================
-FIND_PACKAGE(Boost REQUIRED)
+FIND_PACKAGE(MyBoost REQUIRED)
 INCLUDE_DIRECTORIES(${Boost_INCLUDE_DIRS} SYSTEM)
 
 # try to find threads ----------------------------
