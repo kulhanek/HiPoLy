@@ -117,8 +117,7 @@ that can only be determined during runtime.
     } catch(std::exception& e) {\
         CTerminalStr tout; \
         tout << std::endl; \
-        tout << "<red>>>> UNHANDLED EXCEPTION: " << e.what() << "</red>" << std::endl; \
-        tout << std::endl; \
+        tout << "<red><b>>>> UNHANDLED EXCEPTION: " << e.what() << "</b></red>" << std::endl; \
         ErrorSystem.PrintErrors(tout); \
         tout << std::endl; \
         return(255); \
