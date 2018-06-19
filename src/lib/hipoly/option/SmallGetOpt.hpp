@@ -64,7 +64,14 @@ public:
     /// set allow program arguments
     void SetAllowProgArgs(bool set);
 
+    /// are program arguments allowed?
     bool IsAllowProgArgs(void);
+
+    /// process unrecognized options as arguments
+    void SetUnrecognizedOptsAsArgs(bool set);
+
+    /// are unrecognized opts enabled?
+    bool AreUnrecognizedOptsAsArgsEnabled(void);
 
 // main methods ---------------------------------------------------------------
     /// set command line
@@ -157,10 +164,11 @@ private:
     CSmallString                    ProgramName;    // program name, either argv[0] or via SetProgramName
 
     // setup
-    bool                            Verbose;        // print error messages
-    bool                            ShowUsage;      // print usage in the case of error
-    bool                            ShowMiniUsage;  // print mini usage in the case of error
-    bool                            AllowPrgArgs;   // allow program arguments
+    bool                            Verbose;            // print error messages
+    bool                            ShowUsage;          // print usage in the case of error
+    bool                            ShowMiniUsage;      // print mini usage in the case of error
+    bool                            AllowPrgArgs;       // allow program arguments
+    bool                            UnrecognizedOpts;   // treat unrecognized opts as arguments
 
     // runtime data
     bool                            Initialized;    // initialized

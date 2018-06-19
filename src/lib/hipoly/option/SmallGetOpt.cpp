@@ -33,6 +33,7 @@ CSmallGetOpt::CSmallGetOpt(void)
     Verbose = true;
     ShowUsage = false;
     AllowPrgArgs = false;
+    UnrecognizedOpts = false;
 
     Restart();
 }
@@ -100,6 +101,20 @@ void CSmallGetOpt::SetAllowProgArgs(bool set)
 bool CSmallGetOpt::IsAllowProgArgs(void)
 {
     return(AllowPrgArgs);
+}
+
+//------------------------------------------------------------------------------
+
+void CSmallGetOpt::SetUnrecognizedOptsAsArgs(bool set)
+{
+    UnrecognizedOpts = set;
+}
+
+//------------------------------------------------------------------------------
+
+bool CSmallGetOpt::AreUnrecognizedOptsAsArgsEnabled(void)
+{
+    return(UnrecognizedOpts);
 }
 
 //==============================================================================
@@ -516,38 +531,52 @@ bool CSmallGetOpt::InitializeOptions(void)
         if( (p_str->GetLength() >= 2) && (p_str->GetBuffer()[0] == '-') ) {
             bool found = true;
             bool has_arg = false;
+            bool is_arg = false;
             if( p_str->GetBuffer()[1] == '-' ) {
                 if( p_str->GetLength() > 2 ) {
                     // process long option
                     if( IsItLongOption(&(p_str->GetBuffer()[2]),has_arg) == false ) {
-                        if( Verbose ) {
+                        if( UnrecognizedOpts && AllowPrgArgs ){
+                            is_arg = true;
+                        } else {
+                            if( Verbose ) {
+                                if( IsError == false ) fprintf(stderr,"\n");
+                                fprintf(stderr,"%s: illegal long option '%s'\n", (char*)GetProgramName(),&(p_str->GetBuffer()[2]));
+                                IsError = true;
+                            }
+                            result = false;
+                            found = false;
+                        }
+                    }
+                } else {
+                    if( UnrecognizedOpts && AllowPrgArgs ){
+                        is_arg = true;
+                    } else {
+                        if(Verbose) {
                             if( IsError == false ) fprintf(stderr,"\n");
-                            fprintf(stderr,"%s: illegal long option '%s'\n", (char*)GetProgramName(),&(p_str->GetBuffer()[2]));
+                            fprintf(stderr,"%s: missing long option name\n",(char*)GetProgramName());
                             IsError = true;
                         }
                         result = false;
                         found = false;
                     }
-                } else {
-                    if(Verbose) {
-                        if( IsError == false ) fprintf(stderr,"\n");
-                        fprintf(stderr,"%s: missing long option name\n",(char*)GetProgramName());
-                        IsError = true;
-                    }
-                    result = false;
-                    found = false;
                 }
             } else {
                 // process short option/options
                 for(unsigned int i=1; i < p_str->GetLength(); i++) {
                     if( IsItShortOption(p_str->GetBuffer()[i],has_arg) == false ) {
-                        if( Verbose ) {
-                            if( IsError == false ) fprintf(stderr,"\n");
-                            fprintf(stderr,"%s: illegal short option '%c'\n", (char*)GetProgramName(),p_str->GetBuffer()[i]);
-                            IsError = true;
+                        if( UnrecognizedOpts && AllowPrgArgs ){
+                            is_arg = true;
+                            break;
+                        } else {
+                            if( Verbose ) {
+                                if( IsError == false ) fprintf(stderr,"\n");
+                                fprintf(stderr,"%s: illegal short option '%c'\n", (char*)GetProgramName(),p_str->GetBuffer()[i]);
+                                IsError = true;
+                            }
+                            result = false;
+                            found = false;
                         }
-                        result = false;
-                        found = false;
                     }
                     if( (has_arg == true) && (p_str->GetLength() > 2) ) {
                         if( Verbose ) {
@@ -558,6 +587,14 @@ bool CSmallGetOpt::InitializeOptions(void)
                         result = false;
                     }
                 }
+            }
+            if( is_arg == true ){
+                int           id = O.CurrentID();
+                CSmallString* p_tstr = O.Remove(false);   // remove object from list but do not destroy it
+                A.InsertAfter(p_tstr,id,true);
+                if( DA.IsValid() == false ) DA = A;
+                if( FA.IsValid() == false ) FA = A;
+                continue;
             }
             if( found == false ) {
                 O++;
