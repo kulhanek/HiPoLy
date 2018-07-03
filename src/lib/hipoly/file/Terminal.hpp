@@ -153,6 +153,7 @@ private:
     // formatted output
     int                         CommandLevel;
     std::stringstream           Command;
+    int                         BlockCount;
     bool                        BlockMode;
     int                         LeftOffset;
 };

@@ -432,6 +432,7 @@ void CTerminal::ResetFormattedStream(void)
     Command.clear();
     BlockMode = false;
     LeftOffset = 0;
+    BlockCount = 0;
 }
 
 //------------------------------------------------------------------------------
@@ -460,6 +461,7 @@ bool CTerminal::PrintFormattedChar(int c)
     if( c == '<' ) {
         if( CommandLevel == 1 ) {
             fprintf(FOut,"%c",(char)c);
+            BlockCount++;
             Command.str("");
             Command.clear();
             CommandLevel = 0;
@@ -479,6 +481,7 @@ bool CTerminal::PrintFormattedChar(int c)
     if( c == '/' ) {
         if( CommandLevel == 0 ) {
             fprintf(FOut,"%c",(char)c);
+            BlockCount++;
             return(true);
         }
         if( CommandLevel != 1 ) {
@@ -494,6 +497,7 @@ bool CTerminal::PrintFormattedChar(int c)
     if( c == '>' ) {
         if( CommandLevel == 0 ) {
             fprintf(FOut,"%c",(char)c);
+            BlockCount++;
             return(true);
         }
         if( (CommandLevel != 2) && (CommandLevel != 4) ) {
@@ -535,6 +539,7 @@ bool CTerminal::PrintFormattedChar(int c)
                 BlockMode = true;
                 std::string tmp;
                 LeftOffset = 0;
+                BlockCount = 0;
                 Command >> tmp >> LeftOffset;
                 for(int i=0; i < LeftOffset; i++ ) fprintf(FOut," ");
             }
@@ -595,12 +600,20 @@ bool CTerminal::PrintFormattedChar(int c)
     }
     if( BlockMode == false ) {
         fprintf(FOut,"%c",(char)c);
+        BlockCount++;
     } else {
-        if( c == '\n' ) {
-            for(int i=0; i < LeftOffset; i++ ) fprintf(FOut," ");
+        if( (char)c == '\n' ) {
             fprintf(FOut,"\n");
+            for(int i=0; i < LeftOffset; i++ ) fprintf(FOut," ");
+            BlockCount = 0;
         } else {
             fprintf(FOut,"%c",(char)c);
+            BlockCount++;
+            if( BlockCount + LeftOffset + 1 > NColumns ){
+                fprintf(FOut,"\n");
+                for(int i=0; i < LeftOffset; i++ ) fprintf(FOut," ");
+                BlockCount = 0;
+            }
         }
     }
     return(true);

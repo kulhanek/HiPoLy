@@ -374,6 +374,12 @@ void CSimpleOptions::PrintUsageInTerminal(std::ostream& vout)
         }
         // print option description
         if(op_desc != NULL){
+            if( op_desc.GetLength() > 0 ){
+                if( op_desc[op_desc.GetLength()-1] == '\n' ){
+                    CSmallString tmp = op_desc.GetSubString(0,op_desc.GetLength()-1);
+                    op_desc = tmp;
+                }
+            }
             vout << "<block 10>" << op_desc << "</block>" << endl;
         }
         // print option default value
@@ -413,16 +419,22 @@ void CSimpleOptions::PrintUsageInWiki(FILE* fout)
 
 void CSimpleOptions::PrintUsageInWiki(std::ostream& vout)
 {
+    vout << "<div style=\"text-align: center\">" << GetProgramName() << ": version " << GetProgramVers() << "</div>";
+
     // count number of options
     int cmand = GetNumOfMandOptsInList();
     int copt = GetNumOfOptsInList();
 
     // print header --------------------------------
     vout << "'''Name'''" << endl << endl;
-    vout << GetProgramName() << endl << endl;
+    vout << "<span style=\"margin-left: 15px;\">";
+    String2Wiki(GetProgramName(),vout);
+    vout << "</span>" << endl << endl;
 
     vout << "'''Synopsis'''" << endl << endl;
-    vout << "<span style=\"color: maroon;\">" << GetProgramName() << "</span>";
+    vout << "<span style=\"color: maroon; margin-left: 15px;\">";
+    String2Wiki(GetProgramName(),vout);
+    vout << "</span>";
 
     if( cmand == 0 ) {
         if( copt > 0 ) {
@@ -466,13 +478,15 @@ void CSimpleOptions::PrintUsageInWiki(std::ostream& vout)
     vout << endl << endl;
 
     vout << "'''Description'''" << endl << endl;
-    vout << GetProgramDesc() << endl << endl;
+    vout << "<p style=\"text-indent: 1em; text-align: justify;\">";
+    String2Wiki(GetProgramDesc(),vout);
+    vout << "</p>" << endl << endl;
 
     // print arguments -----------------------------
     if( GetProgArgsLongDesc() == NULL ) {
         if( carg > 0 ) {
             vout << "'''Arguments'''" << endl << endl;
-            vout << "{| style=\"margin-left: 2em; width: 75%;\"\n";
+            vout << "{| style=\"margin-left: 2em; width: 95%;\"\n";
         }
         i = 0; // arguments are addressed from zero
         while(ProcessOption(i,GET_ARG_DESC,op_mand,op_short,op_long,op_param,op_desc)) {
@@ -481,13 +495,16 @@ void CSimpleOptions::PrintUsageInWiki(std::ostream& vout)
             } else {
                 vout << "|- style=\"vertical-align: top;\"" << endl;
             }
-            vout << "| <span style=\"color: purple;\">" << op_param << "</span><br/>" << endl;
-            vout << "<span style=\"margin-left: 30px;\">" << op_desc << "</span>" << endl;
+            vout << "| <span style=\"color: purple;\">" << op_param << "</span><br/>";
+            vout << "<div style=\"margin-left: 30px;\">";
+            String2Wiki(op_desc,vout);
+            vout << "</div>" << endl;
             i++;
         }
         if( carg > 0 ) vout << "|}" << endl << endl;
     } else {
-        vout << GetProgArgsLongDesc() << endl << endl;
+        String2Wiki(GetProgArgsLongDesc(),vout);
+        vout << endl << endl;
     }
 
     // print options -----------------------------
@@ -524,13 +541,22 @@ void CSimpleOptions::PrintUsageInWiki(std::ostream& vout)
             }
         }
         // print option description
-        if(op_desc != NULL) vout << "<span style=\"margin-left: 30px;\">" << op_desc << "</span>";
+        if( op_desc.GetLength() > 0 ){
+            if( op_desc[op_desc.GetLength()-1] == '\n' ){
+                CSmallString tmp = op_desc.GetSubString(0,op_desc.GetLength()-1);
+                op_desc = tmp;
+            }
+        }
+        vout << "<div style=\"margin-left: 30px;\">";
+        String2Wiki(op_desc,vout);
+        vout << "</div>";
         // print option default value
         if(op_param != NULL) {
             DefValue.str("");
             ProcessOption(i,PRINT_DEFAULT_OPT_VALUE,op_mand,op_short,op_long,op_param,op_desc);
-            vout << "<br/>";
-            vout << "<span style=\"color:purple; margin-left: 30px;\">(Default: " << DefValue.str() << ")</span>";
+            if( DefValue.str().size() != 0 ){
+                vout << "<span style=\"color:purple; margin-left: 30px;\">(Default: " << DefValue.str() << ")</span>";
+            }
         }
         vout << endl;
         i++;
@@ -1074,6 +1100,199 @@ bool CSimpleOptions::ConvertArgument(const CSmallString& src_arg,double& dest_ar
 bool CSimpleOptions::ConvertArgument(const CSmallString& src_arg,CSmallString& dest_arg)
 {
     dest_arg = src_arg;
+    return(true);
+}
+
+
+//==============================================================================
+//------------------------------------------------------------------------------
+//==============================================================================
+
+void CSimpleOptions::ResetFormattedStream(void)
+{
+    CommandLevel = 0;
+    Command.str("");
+    Command.clear();
+    BlockMode = false;
+    LeftOffset = 0;
+    FirstSpace = false;
+}
+
+//------------------------------------------------------------------------------
+
+void CSimpleOptions::String2Wiki(const CSmallString& text,std::ostream& vout)
+{
+    ResetFormattedStream();
+    for(unsigned int i=0; i < text.GetLength(); i++){
+        PrintFormattedChar(text[i],vout);
+    }
+}
+
+//------------------------------------------------------------------------------
+
+bool CSimpleOptions::PrintFormattedChar(int c,std::ostream& vout)
+{
+    // levels
+    // 12
+    // <c>
+    // </c>
+    // 134
+
+    if( c == '<' ) {
+        if( CommandLevel == 1 ) {
+            vout << (char)c;
+            Command.str("");
+            Command.clear();
+            CommandLevel = 0;
+            return(true);
+        }
+        if( CommandLevel != 0 ) {
+            vout << "!formating error!";
+            Command.str("");
+            Command.clear();
+            CommandLevel = 0;
+            return(false);
+        }
+        CommandLevel = 1;
+        return(true);
+    }
+
+    if( c == '/' ) {
+        if( CommandLevel == 0 ) {
+            vout << (char)c;
+            return(true);
+        }
+        if( CommandLevel != 1 ) {
+            vout << "!formating error1!";
+            Command.str("");
+            Command.clear();
+            CommandLevel = 0;
+            return(false);
+        }
+        CommandLevel = 3;
+        return(true);
+    }
+    if( c == '>' ) {
+        if( CommandLevel == 0 ) {
+            vout << (char)c;
+            return(true);
+        }
+        if( (CommandLevel != 2) && (CommandLevel != 4) ) {
+            vout << "!formating error2!";
+            Command.str("");
+            Command.clear();
+            CommandLevel = 0;
+            return(false);
+        }
+
+        std::string cmd = Command.str();
+
+        // apply command
+        if( CommandLevel == 2 ) {
+            if( cmd == "b" ) {
+                vout << "<span style=\"font-style: bold;\">";
+            } else if ( cmd == "u" ) {
+                vout << "<span style=\"text-decoration: underline;\">";
+            } else if ( cmd == "i" ) {
+                vout << "<span style=\"font-style: italic;\">";
+            } else if ( cmd == "black" ) {
+                vout << "<span style=\"color: black;\">";
+            } else if ( cmd == "red" ) {
+                vout << "<span style=\"color: red;\">";
+            } else if ( cmd == "green" ) {
+                vout << "<span style=\"color: green;\">";
+            } else if ( cmd == "yellow" ) {
+                vout << "<span style=\"color: yellow;\">";
+            } else if ( cmd == "blue" ) {
+                vout << "<span style=\"color: blue;\">";
+            } else if ( cmd == "purple" ) {
+                vout << "<span style=\"color: purple;\">";
+            } else if ( cmd == "cyan" ) {
+                vout << "<span style=\"color: cyan;\">";
+            } else if ( cmd == "white" ) {
+                vout << "<span style=\"color: white;\">";
+            } else if ( cmd.find("block") == 0 ) {
+                BlockMode = true;
+                std::string tmp;
+                LeftOffset = 0;
+                Command >> tmp >> LeftOffset;
+                vout << "<div style=\"margin-left: 30px;\">";
+            }
+        }
+
+        // revers command
+        if( CommandLevel == 4 ) {
+            if( cmd == "b" ) {
+                vout << "</span>";
+            } else if ( cmd == "u" ) {
+                vout << "</span>";
+            } else if ( cmd == "i" ) {
+                vout << "</span>";
+
+            } else if ( cmd == "black" ) {
+                vout << "</span>";
+            } else if ( cmd == "red" ) {
+                vout << "</span>";
+            } else if ( cmd == "green" ) {
+                vout << "</span>";
+            } else if ( cmd == "yellow" ) {
+                vout << "</span>";
+            } else if ( cmd == "blue" ) {
+                vout << "</span>";
+            } else if ( cmd == "purple" ) {
+                vout << "</span>";
+            } else if ( cmd == "cyan" ) {
+                vout << "</span>";
+            } else if ( cmd == "white" ) {
+                vout << "</span>";
+            } else if ( cmd == "block" ) {
+                vout << "</div>";
+                BlockMode = false;
+                LeftOffset = 0;
+            }
+        }
+
+        Command.str("");
+        Command.clear();
+        CommandLevel = 0;
+        return(true);
+    }
+    if( (CommandLevel == 1) || (CommandLevel == 2) ) {
+        Command << (char)c;
+        CommandLevel = 2;
+        return(true);
+    }
+    if( (CommandLevel == 3) || (CommandLevel == 4) ) {
+        Command << (char)c;
+        CommandLevel = 4;
+        return(true);
+    }
+    if( CommandLevel != 0 ) {
+        vout << "!formating error4!";
+        Command.str("");
+        Command.clear();
+        CommandLevel = 0;
+        return(false);
+    }
+    if( BlockMode == false ) {
+        if( c == '\n' ){
+            FirstSpace = true;
+            vout << "<br />";
+        } else {
+            if( (FirstSpace == true) && (c == ' ') ) vout << "<span></span>";
+            vout << (char)c;
+            FirstSpace = false;
+        }
+    } else {
+        if( c == '\n' ) {
+            FirstSpace = true;
+            vout << "<br />";
+        } else {
+            if( (FirstSpace == true) && (c == ' ') ) vout << "<span></span>";
+            vout << (char)c;
+            FirstSpace = false;
+        }
+    }
     return(true);
 }
 

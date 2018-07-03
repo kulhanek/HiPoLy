@@ -110,6 +110,17 @@ protected:
     virtual int FinalizeOptions(void);         // finalize options
     virtual int CheckArguments(void);          // check arguments
 
+    // formatted output for wiki output
+    int                         CommandLevel;
+    std::stringstream           Command;
+    bool                        BlockMode;
+    int                         LeftOffset;
+    bool                        FirstSpace;
+
+    void String2Wiki(const CSmallString& text,std::ostream& vout);
+    void ResetFormattedStream(void);
+    bool PrintFormattedChar(int c,std::ostream& vout);
+
     enum EActions {
         SET_OPT_DEFAULT,
         SET_ARG_DEFAULT,
