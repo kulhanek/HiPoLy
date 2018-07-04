@@ -120,6 +120,7 @@ protected:
     void String2Wiki(const CSmallString& text,std::ostream& vout);
     void ResetFormattedStream(void);
     bool PrintFormattedChar(int c,std::ostream& vout);
+    const CSmallString TrimFinalEndLine(const CSmallString& text);
 
     enum EActions {
         SET_OPT_DEFAULT,

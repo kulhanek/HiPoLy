@@ -262,15 +262,14 @@ void CSimpleOptions::PrintUsageInTerminal(std::ostream& vout)
     int copt = GetNumOfOptsInList();
 
     // print header --------------------------------
-    vout << "<b>Usage: <red>" << GetProgramName() << "</red>";
+    vout << "<b>Usage: <red>" << GetProgramName() << "</red></b>";
     if( cmand == 0 ) {
         if( copt > 0 ) {
-            vout << " <blue>[OPTIONS]</blue>";
+            vout << " <b><blue>[OPTIONS]</blue></b>";
         }
     } else {
-        vout << " <blue>OPTIONS</blue>";
+        vout << " <b><blue>OPTIONS</blue></b>";
     }
-    vout << "</b>";
 
     int            i;
     bool           op_mand;
@@ -310,7 +309,7 @@ void CSimpleOptions::PrintUsageInTerminal(std::ostream& vout)
     // print description ---------------------------
     const char* p_progdescr = GetProgramDesc();
     if( p_progdescr != NULL ) {
-        vout << GetProgramDesc() << endl;
+        vout << TrimFinalEndLine(GetProgramDesc()) << endl;
     }
     vout << endl;
 
@@ -328,12 +327,15 @@ void CSimpleOptions::PrintUsageInTerminal(std::ostream& vout)
                 vout << "  ";
             }
             vout << "<b><cyan>" << op_param << "</cyan></b>" << endl;
-            vout << "<block 10>" << op_desc << "</block>" << endl;
+            vout << "<block 10>" << TrimFinalEndLine(op_desc) << "</block>" << endl;
             i++;
         }
         if( copt > 0 && carg > 0 ) vout << endl;
     } else {
-        vout << GetProgArgsLongDesc() << endl;
+        vout << "<b>Arguments:</b>" << endl;
+        vout << "<block 4>";
+        vout << TrimFinalEndLine(GetProgArgsLongDesc());
+        vout << "</block>" << endl;
         if( copt > 0 ) vout << endl;
     }
 
@@ -374,13 +376,8 @@ void CSimpleOptions::PrintUsageInTerminal(std::ostream& vout)
         }
         // print option description
         if(op_desc != NULL){
-            if( op_desc.GetLength() > 0 ){
-                if( op_desc[op_desc.GetLength()-1] == '\n' ){
-                    CSmallString tmp = op_desc.GetSubString(0,op_desc.GetLength()-1);
-                    op_desc = tmp;
-                }
-            }
-            vout << "<block 10>" << op_desc << "</block>" << endl;
+
+            vout << "<block 10>" << TrimFinalEndLine(op_desc) << "</block>" << endl;
         }
         // print option default value
         if(op_param != NULL) {
@@ -398,6 +395,19 @@ void CSimpleOptions::PrintUsageInTerminal(std::ostream& vout)
         vout << endl;
         vout << "<b><yellow>*</yellow></b> mandatory arguments and options." << endl;
     }
+}
+
+//------------------------------------------------------------------------------
+
+const CSmallString CSimpleOptions::TrimFinalEndLine(const CSmallString& text)
+{
+    CSmallString result = text;
+    if( text.GetLength() > 0 ){
+        if( text[text.GetLength()-1] == '\n' ){
+            result = text.GetSubString(0,text.GetLength()-1);
+        }
+    }
+    return(result);
 }
 
 //------------------------------------------------------------------------------
@@ -503,8 +513,10 @@ void CSimpleOptions::PrintUsageInWiki(std::ostream& vout)
         }
         if( carg > 0 ) vout << "|}" << endl << endl;
     } else {
+        vout << "'''Arguments'''" << endl << endl;
+        vout << "<div style=\"margin-left: 2em;\">";
         String2Wiki(GetProgArgsLongDesc(),vout);
-        vout << endl << endl;
+        vout << "</div>" << endl << endl;
     }
 
     // print options -----------------------------
@@ -1123,8 +1135,9 @@ void CSimpleOptions::ResetFormattedStream(void)
 void CSimpleOptions::String2Wiki(const CSmallString& text,std::ostream& vout)
 {
     ResetFormattedStream();
-    for(unsigned int i=0; i < text.GetLength(); i++){
-        PrintFormattedChar(text[i],vout);
+    CSmallString ftext = TrimFinalEndLine(text);
+    for(unsigned int i=0; i < ftext.GetLength(); i++){
+        PrintFormattedChar(ftext[i],vout);
     }
 }
 
@@ -1208,7 +1221,7 @@ bool CSimpleOptions::PrintFormattedChar(int c,std::ostream& vout)
             } else if ( cmd == "purple" ) {
                 vout << "<span style=\"color: purple;\">";
             } else if ( cmd == "cyan" ) {
-                vout << "<span style=\"color: cyan;\">";
+                vout << "<span style=\"color: darkcyan;\">";
             } else if ( cmd == "white" ) {
                 vout << "<span style=\"color: white;\">";
             } else if ( cmd.find("block") == 0 ) {
