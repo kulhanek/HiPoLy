@@ -30,7 +30,7 @@
 	#include "config.h"
 #endif
 
-//kulhanek - We do not want to use pthreads
+/* kulhanek - We do not want to use pthreads */
 #define BR_PTHREADS 0
 
 #ifndef BR_PTHREADS

@@ -17,7 +17,7 @@
 #ifndef _PREFIX_H_
 #define _PREFIX_H_
 
-//! kulhanek - we always use BINRELOC
+/* kulhanek - we always use BINRELOC */
 #define ENABLE_BINRELOC
 
 #ifdef __cplusplus
