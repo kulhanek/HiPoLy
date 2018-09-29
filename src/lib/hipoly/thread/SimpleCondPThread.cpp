@@ -35,7 +35,7 @@ CSimpleCondPThread::CSimpleCondPThread(void)
     if( result == 0 ) return;
     CSmallString error;
     error << "unable to init condition : " << strerror(errno);
-    RUNTIME_ERROR(error)
+    ES_ERROR(error);
 }
 
 //------------------------------------------------------------------------------
@@ -46,7 +46,7 @@ CSimpleCondPThread::~CSimpleCondPThread(void)
     if( result == 0 ) return;
     CSmallString error;
     error << "unable to destroy condition : " << strerror(errno);
-    RUNTIME_ERROR(error)
+    ES_ERROR(error);
 }
 
 //==============================================================================

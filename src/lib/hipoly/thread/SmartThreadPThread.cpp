@@ -63,14 +63,14 @@ CSmartThreadPThread::~CSmartThreadPThread(void)
     if( result != 0 ){
         CSmallString error;
         error << "unable to destroy cond: " << strerror(errno);
-        RUNTIME_ERROR(error);
+        ES_ERROR(error);
     }
 
     result = pthread_mutex_destroy(&WaitMutex);
     if( result != 0 ){
         CSmallString error;
         error << "unable to destroy mutex: " << strerror(errno);
-        RUNTIME_ERROR(error);
+        ES_ERROR(error);
     }
 }
 
