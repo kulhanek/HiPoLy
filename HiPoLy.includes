@@ -1,0 +1,14 @@
+src/lib/hipoly/binreloc
+src/lib/hipoly/color
+src/lib/hipoly/compress
+src/lib/hipoly/error
+src/lib/hipoly/event
+src/lib/hipoly/file
+src/lib/hipoly/list
+src/lib/hipoly/option
+src/lib/hipoly/string
+src/lib/hipoly/thread
+src/lib/hipoly/time
+src/lib/hipoly/xml
+src/lib/hipoly
+src/test

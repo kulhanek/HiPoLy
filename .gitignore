@@ -8,3 +8,9 @@ Makefile
 /lib
 /include
 /test
+Doxyfile.in
+HiPoLy.creator.user*
+src/tests/hipoly-options/hipoly-options
+src/tests/hipoly-uuidgen/hipoly-uuidgen
+src/tests/hipoly-xml/hipoly-xml
+
