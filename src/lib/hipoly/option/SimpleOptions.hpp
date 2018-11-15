@@ -324,7 +324,7 @@ protected:
         switch(action){ \
             case SET_OPT_DEFAULT: \
                 opt_is_set_##name = false; \
-                opt_##name = default_value; \
+                    opt_##name = default_value; \
                 return(true); \
             case GET_OPT_DESC: \
                 op_mand = mand; \
