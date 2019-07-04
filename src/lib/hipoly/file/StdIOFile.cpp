@@ -47,8 +47,8 @@ CStdIOFile::~CStdIOFile(void)
 
 bool CStdIOFile::Open(const CSmallString& name,const CSmallString& mode)
 {
+    IsOwned = false;
     if( name == "-" ){
-        IsOwned = false;
         if( mode == "r" ){
             File = stdin;
             return(true);
@@ -63,7 +63,6 @@ bool CStdIOFile::Open(const CSmallString& name,const CSmallString& mode)
         ES_ERROR(error);
         return(false);
     } else {
-        IsOwned = false;
         File = fopen(name,mode);
         if( File == NULL ){
             CSmallString error;
@@ -72,6 +71,7 @@ bool CStdIOFile::Open(const CSmallString& name,const CSmallString& mode)
             ES_ERROR(error);
             return(false);
         }
+        IsOwned = true;
         return(true);
     }
 }
