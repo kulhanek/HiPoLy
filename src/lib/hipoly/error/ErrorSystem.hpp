@@ -24,6 +24,7 @@
 #include <HiPoLyMainHeader.hpp>
 #include <SmallString.hpp>
 #include <XMLDocument.hpp>
+#include <XMLElement.hpp>
 #include <SimpleMutex.hpp>
 #include <EventManager.hpp>
 #include <Terminal.hpp>

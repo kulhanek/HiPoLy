@@ -36,10 +36,11 @@ CSmartThreadPThread::CSmartThreadPThread(CSmartThread* p_owner)
     SmartThread = p_owner;
 
     int result;
+
     result = pthread_mutex_init(&WaitMutex,NULL);
     if( result != 0 ){
         CSmallString error;
-        error << "unable to create mutex: " << strerror(errno);
+        error << "unable to create wait mutex: " << strerror(errno);
         RUNTIME_ERROR(error);
     }
 
@@ -69,7 +70,7 @@ CSmartThreadPThread::~CSmartThreadPThread(void)
     result = pthread_mutex_destroy(&WaitMutex);
     if( result != 0 ){
         CSmallString error;
-        error << "unable to destroy mutex: " << strerror(errno);
+        error << "unable to destroy wait mutex: " << strerror(errno);
         ES_ERROR(error);
     }
 }

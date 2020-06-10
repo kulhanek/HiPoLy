@@ -4,6 +4,7 @@
 
 CMAKE_MINIMUM_REQUIRED(VERSION 3.0 FATAL_ERROR)
 #SET(CMAKE_VERBOSE_MAKEFILE ON)
+PROJECT(HiPoLy)
 
 # ==============================================================================
 # conditional setup ------------------------------------------------------------
@@ -109,7 +110,7 @@ LINK_DIRECTORIES(${CMAKE_BINARY_DIR}/lib)
 
 IF(NOT DEFINED COMPOSITE_PROJECT)
     SET(CMAKE_CXX_FLAGS_RELEASE "-O2")
-    SET(CMAKE_CXX_FLAGS_DEBUG "-g -Wall -Werror -pedantic-errors -Wundef -Wno-long-long")
+    SET(CMAKE_CXX_FLAGS_DEBUG "-g -Wall -Werror -pedantic-errors -pedantic -Wundef -Wno-long-long")
     #SET(CMAKE_BUILD_TYPE Release)
     SET(CMAKE_BUILD_TYPE Debug)
 ENDIF(NOT DEFINED COMPOSITE_PROJECT)
