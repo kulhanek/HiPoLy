@@ -708,23 +708,23 @@ void CXMLPrinter::EncodeXMLText(const CSmallString& input,CSmallString& output)
     for(unsigned int i = 0; i < input.GetLength(); i++) {
         switch(input[i]) {
         case '<':
-            strncpy(&output[output_pos],"&lt;",4);
+            strcpy(&output[output_pos],"&lt;");
             output_pos += 4;
             break;
         case '&' :
-            strncpy (&output[output_pos],"&amp;",5);
+            strcpy (&output[output_pos],"&amp;");
             output_pos += 5;
             break;
         case '>' :
-            strncpy (&output[output_pos],"&gt;",4);
+            strcpy (&output[output_pos],"&gt;");
             output_pos += 4;
             break;
         case '"' :
-            strncpy (&output[output_pos],"&quot;",6);
+            strcpy (&output[output_pos],"&quot;");
             output_pos += 6;
             break;
         case '\'' :
-            strncpy (&output[output_pos],"&apos;",6);
+            strcpy (&output[output_pos],"&apos;");
             output_pos += 6;
             break;
         default:
