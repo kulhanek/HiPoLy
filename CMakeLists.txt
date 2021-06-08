@@ -2,7 +2,7 @@
 # HiPoLy CMake File
 # ==============================================================================
 
-CMAKE_MINIMUM_REQUIRED(VERSION 3.0 FATAL_ERROR)
+CMAKE_MINIMUM_REQUIRED(VERSION 3.10 FATAL_ERROR)
 #SET(CMAKE_VERBOSE_MAKEFILE ON)
 PROJECT(HiPoLy)
 
