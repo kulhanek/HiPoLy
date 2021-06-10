@@ -105,6 +105,7 @@ public:
         CSmallString    Long;           // long option name or null if not applied
         bool            HasArg;         // has argument
         int             OptID;          // option ID
+        bool            Set;
     };
 
     /// enable to re-process options once again, option list is not deleted
@@ -157,6 +158,12 @@ public:
 
     /// return argument with index
     const CSmallString& GetProgArg(int index);
+
+    /// is option set?
+    bool IsOptionSet(int optid);
+
+    /// set option set flag?
+    void SetOption(int optid);
 
 // section of private data and methods ----------------------------------------
 private:

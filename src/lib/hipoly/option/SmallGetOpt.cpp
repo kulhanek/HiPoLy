@@ -672,6 +672,38 @@ CSmallGetOpt::COption*  CSmallGetOpt::FindShortOption(char sopt,bool& has_arg)
 
 //------------------------------------------------------------------------------
 
+bool CSmallGetOpt::IsOptionSet(int optid)
+{
+    CSimpleIterator<COption>   I(OptList);
+    COption*                   p_opt;
+
+    while( (p_opt = I.Current()) != NULL ) {
+        if( p_opt->OptID == optid ) {
+            return(p_opt->Set);
+        }
+        I++;
+    }
+
+    return(false);
+}
+
+//------------------------------------------------------------------------------
+
+void CSmallGetOpt::SetOption(int optid)
+{
+    CSimpleIterator<COption>   I(OptList);
+    COption*                   p_opt;
+
+    while( (p_opt = I.Current()) != NULL ) {
+        if( p_opt->OptID == optid ) {
+            p_opt->Set = true;
+        }
+        I++;
+    }
+}
+
+//------------------------------------------------------------------------------
+
 bool  CSmallGetOpt::IsItLongOption(const CSmallString& lopt,bool& has_arg)
 {
     return( FindLongOption(lopt,has_arg) != NULL );
@@ -766,6 +798,7 @@ CSmallGetOpt::COption::COption(void)
     Short = '\0';
     HasArg = false;
     OptID = GO_BAD_OPTION;
+    Set = false;
 }
 
 //------------------------------------------------------------------------------
@@ -776,6 +809,7 @@ CSmallGetOpt::COption::COption(const char _short,const CSmallString& _long,const
     Long = _long;
     HasArg = _hasarg;
     OptID = _id;
+    Set = false;
 }
 
 //==============================================================================

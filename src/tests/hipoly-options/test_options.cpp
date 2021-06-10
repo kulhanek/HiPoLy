@@ -46,9 +46,12 @@ int main(int argc, char* argv[])
 
     CMyOptions opt;
 
+    opt.SetAllowProgArgs(true);
     opt.ParseCmdLine(argc,argv);
     opt.PrintCmdLine();
     if( opt.GetOptHelp()) opt.PrintUsage();
+
+    opt.PrintOptions();
 
     return(0);
 }

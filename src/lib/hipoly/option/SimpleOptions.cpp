@@ -399,6 +399,55 @@ void CSimpleOptions::PrintUsageInTerminal(std::ostream& vout)
 
 //------------------------------------------------------------------------------
 
+void CSimpleOptions::PrintOptions(FILE* fout)
+{
+    if( fout == NULL ){
+        fout = stdout;
+    }
+
+    int            i;
+    bool           op_mand;
+    CSmallString   op_short,op_long,op_param,op_desc;
+
+    fprintf(fout,"# Program: %s\n",(const char*)GetProgramName());
+    fprintf(fout,"# Version: %s\n",(const char*)GetProgramVers());
+
+    if( GetNumberOfProgArgs() > 0 ){
+
+        fprintf(fout,"#\n");
+        fprintf(fout,"# Arguments:\n");
+        fprintf(fout,"# N  ARG           VALUE              \n");
+        fprintf(fout,"# -- ------------- -------------------\n");
+
+        for(int i=0; i < GetNumberOfProgArgs(); i++ ){
+            ProcessOption(i,GET_ARG_DESC,op_mand,op_short,op_long,op_param,op_desc);
+            fprintf(fout,"# %2d %-13s %-20s\n",i+1,(const char*)op_param,(const char*)GetProgArg(i));
+        }
+    }
+
+    fprintf(fout,"#\n");
+    fprintf(fout,"# Options:\n");
+    fprintf(fout,"# S  LONG            SET VALUE              \n");
+    fprintf(fout,"# -- --------------- --- -------------------\n");
+    i = 1;
+    while(ProcessOption(i,GET_OPT_DESC,op_mand,op_short,op_long,op_param,op_desc)) {
+        const char* set = "no";
+        if( IsOptionSet(i) ) set = "yes";
+        if( op_short != NULL ) op_short = "-" + op_short;
+        if( op_long != NULL )   op_long = "--" + op_long;
+        fprintf(fout,"# %2s %-15s %-3s ",(const char*)op_short,(const char*)op_long,set);
+        DefValue.str("");
+        ProcessOption(i,PRINT_DEFAULT_OPT_VALUE,op_mand,op_short,op_long,op_param,op_desc);
+        if( DefValue.str().size() != 0 ){
+            fprintf(fout,"%-s",DefValue.str().c_str());
+        }
+        fprintf(fout,"\n");
+        i++;
+    }
+}
+
+//------------------------------------------------------------------------------
+
 const CSmallString CSimpleOptions::TrimFinalEndLine(const CSmallString& text)
 {
     CSmallString result = text;
@@ -696,9 +745,9 @@ bool CSimpleOptions::ProcessOption(int item,
 
 void CSimpleOptions::SetDefault(void)
 {
-    int            i;
+    int             i;
     bool            op_mand;
-    CSmallString     op_short,op_long,op_param,op_desc;
+    CSmallString    op_short,op_long,op_param,op_desc;
 
     i = 1;
     while(ProcessOption(i,SET_OPT_DEFAULT,op_mand,op_short,op_long,op_param,op_desc)) {
@@ -760,10 +809,10 @@ bool CSimpleOptions::RunTimeCheck(void)
 
 int CSimpleOptions::GetNumOfMandOptsInList(void)
 {
-    int            i = 1;
-    int            count = 0;
+    int             i = 1;
+    int             count = 0;
     bool            op_mand;
-    CSmallString     op_short,op_long,op_param,op_desc;
+    CSmallString    op_short,op_long,op_param,op_desc;
 
     while(ProcessOption(i,GET_OPT_DESC,op_mand,op_short,op_long,op_param,op_desc)) {
         if( op_mand == true ) count++;
@@ -815,6 +864,7 @@ bool CSimpleOptions::SetOptions(void)
 
     while( (optid = GetOpt()) >= 0 ) {
         ProcessOption(optid,SET_OPT,op_mand,op_short,op_long,op_param,op_desc);
+        SetOption(optid);
     }
 
     if( ConversionError == true ) return(false);
