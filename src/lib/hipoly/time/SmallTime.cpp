@@ -115,7 +115,7 @@ CSmallString CSmallTime::GetSTime(void) const
 CSmallString CSmallTime::GetSTimeFull(void) const
 {
     char buffer[20];
-    sprintf(buffer,"%02ld:%02d:%02d",Time /3600,GetMinute(),GetSecond());
+    sprintf(buffer,"%02ld:%02d:%02d",Time/3600,GetMinute(),GetSecond());
     return(CSmallString(buffer));
 }
 
