@@ -72,12 +72,20 @@ public:
     /// get terminal
     CTerminal& GetTerminal(void);
 
+    /// disable/enable formatting
+    void DisableFormatting(bool set);
+
 // section of private data ----------------------------------------------------
 private:
     CTerminal               Terminal;
     CTerminalBuffer         Buffer;
     FILE*                   File;
 };
+
+// -----------------------------------------------------------------------------
+
+HIPOLY_PACKAGE std::ostream& disablef(std::ostream& os);   // disable formatting
+HIPOLY_PACKAGE std::ostream& enablef(std::ostream& os);    // enable formatting
 
 // -----------------------------------------------------------------------------
 

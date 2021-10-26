@@ -123,6 +123,32 @@ CTerminal& CTerminalStr::GetTerminal(void)
     return(Terminal);
 }
 
+//------------------------------------------------------------------------------
+
+void CTerminalStr::DisableFormatting(bool set)
+{
+    Terminal.DisableFormatting(set);
+}
+
+
+//------------------------------------------------------------------------------
+
+std::ostream& disablef(std::ostream& os)
+{
+    CTerminalStr* p_str = dynamic_cast<CTerminalStr*>(&os);
+    if( p_str != NULL ) p_str->DisableFormatting(true);
+    return(os);
+}
+
+//------------------------------------------------------------------------------
+
+std::ostream& enablef(std::ostream& os)
+{
+    CTerminalStr* p_str = dynamic_cast<CTerminalStr*>(&os);
+    if( p_str != NULL ) p_str->DisableFormatting(true);
+    return(os);
+}
+
 //==============================================================================
 //------------------------------------------------------------------------------
 //==============================================================================

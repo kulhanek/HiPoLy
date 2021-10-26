@@ -41,6 +41,7 @@ CTerminal::CTerminal(void)
     DetectTerminal();
     ResetFormattedStream();
     SetDefault();
+    EnableFormatting = true;
 }
 
 //------------------------------------------------------------------------------
@@ -51,6 +52,14 @@ CTerminal::CTerminal(FILE* fout)
     DetectTerminal();
     ResetFormattedStream();
     SetDefault();
+    EnableFormatting = true;
+}
+
+//------------------------------------------------------------------------------
+
+void CTerminal::DisableFormatting(bool set)
+{
+    EnableFormatting = set;
 }
 
 //------------------------------------------------------------------------------
@@ -451,6 +460,11 @@ int CTerminal::FlushStream(void)
 bool CTerminal::PrintFormattedChar(int c)
 {
     if( FOut == NULL ) return(false);
+
+    if( ! EnableFormatting ){
+        fprintf(FOut,"%c",(char)c);
+        return(true);
+    }
 
     // levels
     // 12

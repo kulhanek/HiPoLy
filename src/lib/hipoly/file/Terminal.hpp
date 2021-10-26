@@ -80,6 +80,9 @@ public:
     static bool GetSize(int &nrow,int &ncolumns);
 
 // executive methods ----------------------------------------------------------
+    /// disable/enable formatting
+    void DisableFormatting(bool set);
+
     /// set foreground and background colors
     bool SetColors(int foreground,int background) const;
 
@@ -156,6 +159,7 @@ private:
     int                         BlockCount;
     bool                        BlockMode;
     int                         LeftOffset;
+    bool                        EnableFormatting;
 };
 
 //------------------------------------------------------------------------------
