@@ -396,6 +396,21 @@ bool CFileSystem::IsFile(const CSmallString& file)
 
 //------------------------------------------------------------------------------
 
+bool CFileSystem::IsSocket(const CSmallString& file)
+{
+#if defined _WIN32 || defined __CYGWIN__
+    return(false);
+#else
+    struct stat my_stat;
+    if( stat(file,&my_stat) != 0 ) {
+        return(false);
+    }
+    return( S_ISSOCK(my_stat.st_mode) );
+#endif
+}
+
+//------------------------------------------------------------------------------
+
 bool CFileSystem::SetPosixMode(const CSmallString& file,int mode)
 {
 #if defined _WIN32 || defined __CYGWIN__

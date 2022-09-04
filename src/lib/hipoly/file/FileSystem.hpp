@@ -76,6 +76,9 @@ public:
     /// is file?
     static bool IsFile(const CSmallString& file);
 
+    /// is socket?
+    static bool IsSocket(const CSmallString& file);
+
     // permisions --------------------------------------------------------------
     /// set posix mode
     static bool SetPosixMode(const CSmallString& file,int mode);
