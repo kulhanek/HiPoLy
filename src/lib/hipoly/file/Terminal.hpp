@@ -26,6 +26,7 @@
 #include <stdio.h>
 #include <vector>
 #include <sstream>
+#include <list>
 
 //------------------------------------------------------------------------------
 
@@ -119,6 +120,13 @@ public:
 
     /// print the list as plain text
     bool PrintPlainList(void);
+
+// list operations ------------------------------------------------------------
+    /// print the list as column sorted list
+    bool PrintColumnSortedList(std::list<CSmallString>& list, unsigned int column_width=0);
+
+    /// print the list as row sorted list
+    bool PrintRowSortedList(std::list<CSmallString>& list, unsigned int column_width=0);
 
 // titles ---------------------------------------------------------------------
     /// print title

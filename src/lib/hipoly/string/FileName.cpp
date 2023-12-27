@@ -23,6 +23,15 @@
 #include <stdlib.h>
 #include <string.h>
 #include <FileSystem.hpp>
+#include <boost/algorithm/string/split.hpp>
+#include <boost/algorithm/string/classification.hpp>
+#include <vector>
+
+//------------------------------------------------------------------------------
+
+using namespace std;
+using namespace boost;
+using namespace boost::algorithm;
 
 //------------------------------------------------------------------------------
 
@@ -56,10 +65,16 @@ CFileName::CFileName(const CSmallString& copystring)
 
 //------------------------------------------------------------------------------
 
+CFileName::CFileName(const std::string& string)
+    : CSmallString(string)
+{
+}
+
+//------------------------------------------------------------------------------
+
 CFileName::CFileName(const char* p_string)
     : CSmallString(p_string)
 {
-
 }
 
 //------------------------------------------------------------------------------
@@ -247,6 +262,61 @@ CFileName CFileName::GetFileNameWithoutExt(void) const
     }
 
     return(GetSubString(from,to-from+1));
+}
+
+//------------------------------------------------------------------------------
+
+CFileName CFileName::RelativeTo(const CFileName& path_to)
+{
+    // https://stackoverflow.com/questions/10167382/boostfilesystem-get-relative-path
+
+    std::string sfrom(GetBuffer());
+    std::string sto(path_to);
+
+    std::vector<std::string> from;
+    std::vector<std::string> to;
+
+#if defined _WIN32 || defined __CYGWIN__
+    split(from,sfrom,is_any_of("\\"));
+    split(to,sto,is_any_of("\\"));
+#else
+    split(from,sfrom,is_any_of("/"));
+    split(to,sto,is_any_of("/"));
+#endif
+
+    // Start at the root path and while they are the same then do nothing then when they first
+    // diverge take the entire from path, swap it with '..' segments, and then append the remainder of the to path.
+    auto fromIter = from.begin();
+    auto toIter = to.begin();
+
+    // Loop through both while they are the same to find nearest common directory
+    while( fromIter != from.end() && toIter != to.end() && *toIter == *fromIter ) {
+       ++toIter;
+       ++fromIter;
+    }
+
+    // Replace to path segments with '..' (from => nearest common directory)
+    CFileName finalPath;
+    while( toIter != to.end() ) {
+        if( finalPath == NULL ) {
+            finalPath = "..";
+        } else {
+            finalPath /= "..";
+        }
+        ++toIter;
+    }
+
+    // Append the remainder of the from path (nearest common directory => from)
+    while( fromIter != from.end() ) {
+        if( finalPath == NULL ) {
+            finalPath = CFileName(*fromIter);
+        } else {
+            finalPath /= CFileName(*fromIter);
+        }
+       ++fromIter;
+    }
+
+    return finalPath;
 }
 
 //------------------------------------------------------------------------------

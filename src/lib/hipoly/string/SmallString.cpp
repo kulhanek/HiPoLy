@@ -162,7 +162,7 @@ CSmallString::~CSmallString(void)
 //------------------------------------------------------------------------------
 //==============================================================================
 
-bool CSmallString::SetLength(int length)
+bool CSmallString::SetLength(unsigned int length)
 {
     if( Buffer ) free(Buffer);
 

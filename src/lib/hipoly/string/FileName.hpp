@@ -23,6 +23,7 @@
 
 #include <HiPoLyMainHeader.hpp>
 #include <SmallString.hpp>
+#include <type_traits>
 
 //------------------------------------------------------------------------------
 
@@ -50,9 +51,31 @@ public:
     CFileName(const CSmallString& copystring);
 
     /// Constructor
+    /*! string from STL string
+    */
+    CFileName(const std::string& string);
+
+    /// Constructor
     /*! string from p_string
     */
     CFileName(const char* p_string);
+
+    /// Constructor
+    /*! range copy constructor
+    */
+    template<class InputIterator>
+    CFileName(InputIterator first, InputIterator last) {
+        size_t len = std::distance(first,last);
+        LengthOfBuffer = 0;
+        Buffer = NULL;
+        SetLength(len);
+        size_t i=0;
+        while(first != last){
+             GetBuffer()[i] = *first;
+             first++;
+             i++;
+        }
+    }
 
     /// destructor
     ~CFileName(void);
@@ -108,6 +131,9 @@ public:
 
     /// return file name without its extension
     CFileName   GetFileNameWithoutExt(void) const;
+
+    /// return relative path
+    CFileName RelativeTo(const CFileName& path_to);
 
     /// absolutize path
     void AbsolutizePath(void);

@@ -335,6 +335,91 @@ bool CTerminal::PrintColumnSortedList(unsigned int column_width)
 
 //------------------------------------------------------------------------------
 
+bool CTerminal::PrintRowSortedList(unsigned int column_width)
+{
+    if( FOut == NULL ) return(false);
+
+    if( column_width <= 0 ) {
+        column_width = 0;
+        for(unsigned int i=0; i < List.size(); i++) {
+            if( List[i].GetLength() > column_width ) column_width = List[i].GetLength();
+        }
+        column_width++; // add one character for space among words
+    }
+
+    int num_col = NColumns / column_width;
+
+    for(unsigned int i=0; i < List.size(); i++) {
+        fprintf(FOut,"%-*s",column_width,(const char*)List[i]);
+        if( (i+1) % num_col == 0 ) fprintf(FOut,"\n");
+    }
+
+    return(true);
+}
+
+//------------------------------------------------------------------------------
+
+bool CTerminal::PrintColumnSortedList(std::list<CSmallString>& list, unsigned int column_width)
+{
+    if( FOut == NULL ) return(false);
+
+    if( column_width <= 0 ) {
+        column_width = 0;
+        for(CSmallString item : list) {
+            if( item.GetLength() > column_width ) column_width = item.GetLength();
+        }
+        column_width++; // add one character for space among words
+    }
+
+    int num_col = NColumns / column_width;
+    int num_ite = list.size();
+    int num_row = num_ite / num_col;
+    if( num_ite % num_col > 0) num_row++;
+
+    for(int i=0; i < num_row; i++) {
+        for(int j=0; j < num_col; j++ ) {
+            int index = i + j*num_row;
+            std::list<CSmallString>::iterator it = list.begin();
+            if( index < num_ite ) {
+                std::advance(it,index);
+                CSmallString item = *it;
+                fprintf(FOut,"%-*s",column_width,(const char*)item);
+            }
+        }
+        fprintf(FOut,"\n");
+    }
+
+    return(true);
+}
+
+//------------------------------------------------------------------------------
+
+bool CTerminal::PrintRowSortedList(std::list<CSmallString>& list, unsigned int column_width)
+{
+    if( FOut == NULL ) return(false);
+
+    if( column_width <= 0 ) {
+        column_width = 0;
+        for(CSmallString item : list) {
+            if( item.GetLength() > column_width ) column_width = item.GetLength();
+        }
+        column_width++; // add one character for space among words
+    }
+
+    int num_col = NColumns / column_width;
+
+    int nitem = 0;
+    for(CSmallString item : list) {
+        fprintf(FOut,"%-*s",column_width,(const char*)item);
+        nitem++;
+        if( nitem % num_col == 0 ) fprintf(FOut,"\n");
+    }
+
+    return(true);
+}
+
+//------------------------------------------------------------------------------
+
 bool CTerminal::PrintPlainList(void)
 {
     if( FOut == NULL ) return(false);

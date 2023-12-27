@@ -82,6 +82,23 @@ public:
     CSmallString(const std::string& string);
 
     /// Constructor
+    /*! range copy constructor
+    */
+    template<class InputIterator>
+    CSmallString(InputIterator first, InputIterator last) {
+        size_t len = std::distance(first,last);
+        LengthOfBuffer = 0;
+        Buffer = NULL;
+        SetLength(len);
+        size_t i=0;
+        while(first != last){
+             GetBuffer()[i] = *first;
+             first++;
+             i++;
+        }
+    }
+
+    /// Constructor
     /*! string from one character
     */
     CSmallString(char character);
@@ -117,7 +134,7 @@ public:
 // length operation ------------------------------------------------------------
 
     /// allocate fixed space for string of maximum length
-    bool          SetLength(int length);
+    bool          SetLength(unsigned int length);
 
     /// get current lenght of string
     unsigned int  GetLength(void) const;
@@ -386,9 +403,9 @@ public:
 // section of private data -----------------------------------------------------
 private:
     /// string buffer
-    char*       Buffer;
+    char*           Buffer;
     /// length of buffer
-    unsigned    LengthOfBuffer;
+    unsigned int    LengthOfBuffer;
 
     friend class CFileName;
 };
