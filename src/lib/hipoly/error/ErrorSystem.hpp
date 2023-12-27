@@ -117,6 +117,7 @@ that can only be determined during runtime.
         return(result); \
     } catch(std::exception& e) {\
         CTerminalStr tout; \
+        tout.Attach(stderr); \
         tout << std::endl; \
         tout << "<red><b>>>> UNHANDLED EXCEPTION: " << e.what() << "</b></red>" << std::endl; \
         ErrorSystem.PrintErrors(tout); \
@@ -125,7 +126,7 @@ that can only be determined during runtime.
     }
 
 /*! use this macro as main function for classes conforming
-    Init,Run, and Finalize methods - for details see TRY_OBJECT
+    Init, Run, and Finalize methods - for details see TRY_OBJECT
 */
 
 #define MAIN_ENTRY(classname) \
