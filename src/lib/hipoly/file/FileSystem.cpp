@@ -255,7 +255,7 @@ bool CFileSystem::CopyFile(const CSmallString& source,
         return(false);
     }
 
-    fd_to = open(dest, O_WRONLY | O_CREAT , 0644);
+    fd_to = open(dest, O_WRONLY | O_CREAT | O_TRUNC , 0644);
     if( fd_to < 0 ){
         close(fd_from);
         ES_ERROR("unable to create destination file");
